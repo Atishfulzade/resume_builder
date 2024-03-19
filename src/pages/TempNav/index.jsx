@@ -55,7 +55,7 @@ export default function VerticalTabs() {
               color: "#404040",
               padding: "10px 10px",
             }}
-            onClick={stopNavigating}
+            // onClick={stopNavigating}
           >
             {matches ? <WorkIcon /> : "Work Experience"}
           </NavLink>
@@ -68,7 +68,7 @@ export default function VerticalTabs() {
               fontSize: "20px",
               padding: "10px 10px",
             }}
-            onClick={stopNavigating}
+            // onClick={stopNavigating}
           >
             {matches ? <SchoolIcon /> : "Education"}
           </NavLink>
@@ -83,7 +83,7 @@ export default function VerticalTabs() {
               paddingLeft: "50px",
               padding: "10px 10px",
             }}
-            onClick={stopNavigating}
+            // onClick={stopNavigating}
           >
             {matches ? <WorkspacePremiumIcon /> : "Key Skill"}
           </NavLink>

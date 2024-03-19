@@ -7,6 +7,7 @@ import {
   TextField,
   Divider,
 } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 const Education = () => {
@@ -26,6 +27,7 @@ const Education = () => {
     setEducationDetails(updatedEducationDetails);
     console.log(educationDetails);
   };
+  const matches = useMediaQuery("(max-width:600px)");
 
   // Function to add a new education detail section
   const addEducation = () => {
