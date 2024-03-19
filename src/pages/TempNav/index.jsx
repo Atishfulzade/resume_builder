@@ -1,10 +1,17 @@
 import * as React from "react";
 import { NavLink, Outlet } from "react-router-dom";
-
+import { useMediaQuery } from "@mui/material";
+import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
+import WorkIcon from "@mui/icons-material/Work";
+import SchoolIcon from "@mui/icons-material/School";
+import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 export default function VerticalTabs() {
+  const matches = useMediaQuery("(max-width:600px)");
+
   const stopNavigating = (e) => {
     e.preventDefault();
   };
+
   return (
     <>
       {/* Container for tabs and content */}
@@ -18,7 +25,7 @@ export default function VerticalTabs() {
             marginTop: "50px",
             flexDirection: "column",
             height: "500px",
-            width: "400px",
+            width: matches ? "100%" : "400px", // Set width dynamically
             gap: "8px",
             borderRight: "1px solid #e7dede",
             paddingTop: "20px",
@@ -32,11 +39,11 @@ export default function VerticalTabs() {
             style={{
               textDecoration: "none",
               fontSize: "20px",
-              color: "#111",
+              color: "#404040",
               padding: "10px 10px",
             }}
           >
-            Personal Info
+            {matches ? <PersonAddAlt1Icon /> : "Personal Info"}
           </NavLink>
           {/* NavLink for Work tab */}
           <NavLink
@@ -45,25 +52,25 @@ export default function VerticalTabs() {
               textDecoration: "none",
               fontSize: "20px",
               whiteSpace: "none",
-              color: "#111",
+              color: "#404040",
               padding: "10px 10px",
             }}
             onClick={stopNavigating}
           >
-            Work Experience
+            {matches ? <WorkIcon /> : "Work Experience"}
           </NavLink>
           {/* NavLink for Education tab */}
           <NavLink
             to="/template/education"
             style={{
               textDecoration: "none",
-              color: "#111",
+              color: "#404040",
               fontSize: "20px",
               padding: "10px 10px",
             }}
             onClick={stopNavigating}
           >
-            Education
+            {matches ? <SchoolIcon /> : "Education"}
           </NavLink>
 
           {/* NavLink for Key Skill tab */}
@@ -71,14 +78,14 @@ export default function VerticalTabs() {
             to="/template/skill"
             style={{
               textDecoration: "none",
-              color: "#111",
+              color: "#404040",
               fontSize: "20px",
               paddingLeft: "50px",
               padding: "10px 10px",
             }}
             onClick={stopNavigating}
           >
-            Key Skill
+            {matches ? <WorkspacePremiumIcon /> : "Key Skill"}
           </NavLink>
         </div>
         {/* Container for content */}
