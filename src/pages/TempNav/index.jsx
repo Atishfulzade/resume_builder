@@ -24,13 +24,13 @@ export default function VerticalTabs() {
             display: "flex",
             marginTop: "50px",
             flexDirection: "column",
-            height: "500px",
-            width: matches ? "100%" : "400px", // Set width dynamically
+            height: "100vh",
+            width: matches ? "fit-content" : "300px", // Set width dynamically
             gap: "8px",
             borderRight: "1px solid #e7dede",
             paddingTop: "20px",
             paddingLeft: "2px",
-            paddingRight: "15px",
+            paddingRight: "5px",
           }}
         >
           {/* NavLink for Personal Info tab */}

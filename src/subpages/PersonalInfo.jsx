@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
+import { setProfilePic } from "../store/profileSlice";
 import { updatePersonalInfo } from "../store/personalInfoSlice";
 import {
   Button,
@@ -15,7 +16,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import avatar from "../assets/user.png";
 
 const PersonalInfo = () => {
-  const [base64String, setBase64String] = useState("");
+  const [profilePicUrl, setProfilePicUrl] = useState(""); // Renamed state variable
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -24,24 +25,27 @@ const PersonalInfo = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const handleFileChange = (event) => {
-    const file = event.target.files[0];
 
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // Set the base64 string to state
-        setBase64String(reader.result);
-      };
-      reader.readAsDataURL(file); // Read the file as data URL (base64)
-    }
+  const handleFileChange = async (event) => {
+    const file = await event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = async () => {
+      const base64String = reader.result;
+      setProfilePicUrl(base64String); // Update the profile picture URL in the state
+      dispatch(setProfilePic(base64String)); // Dispatch action to update Redux store with the profile picture URL
+    };
+
+    reader.readAsDataURL(file);
   };
+
   const onsubmit = (data) => {
     dispatch(updatePersonalInfo(data)); // Dispatch action to update personal info in Redux store
-    data && navigate("/template/work");
+    navigate("/template/work");
   };
+
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="lg" style={{ padding: "2px", paddingBottom: "30px" }}>
       <form onSubmit={handleSubmit(onsubmit)}>
         <Box
           sx={{
@@ -50,7 +54,7 @@ const PersonalInfo = () => {
             flexDirection: "column",
             alignItems: "center",
             borderRadius: 2,
-            p: 4,
+            p: 1,
           }}
         >
           <Typography variant="h5" fontWeight="bold" color="#222" gutterBottom>
@@ -68,7 +72,7 @@ const PersonalInfo = () => {
             }}
           >
             <Avatar
-              src={base64String || avatar}
+              src={profilePicUrl || avatar}
               alt="User Avatar"
               sx={{ width: 120, height: 120 }}
             />
@@ -81,17 +85,11 @@ const PersonalInfo = () => {
               Upload Profile
               <input
                 type="file"
-                onChange={handleFileChange} // Handle file change event
-                style={{ display: "none" }} // Hide the input field
-              />
-              <input
-                type="hidden"
-                {...register("profilepic")} // Register the input field with react-hook-form
-                value={base64String} // Set the value of the hidden input field to the base64 string
+                onChange={handleFileChange}
+                style={{ display: "none" }}
               />
             </Button>
           </Box>
-
           {/* Form Fields */}
           <Box
             sx={{
@@ -102,26 +100,30 @@ const PersonalInfo = () => {
               width: "100%",
             }}
           >
-            <TextField
-              label="First Name"
-              {...register("firstname", { required: true })}
-              aria-invalid={errors.firstname ? "true" : "false"}
-            />
-            {errors.firstname?.type === "required" && (
-              <p role="alert" style={{ color: "red" }}>
-                First name is required
-              </p>
-            )}
-            <TextField
-              label="Last Name"
-              {...register("lastname", { required: true })}
-              aria-invalid={errors.lastname ? "true" : "false"}
-            />
-            {errors.lastname?.type === "required" && (
-              <p role="alert" style={{ color: "red" }}>
-                Last name is required
-              </p>
-            )}
+            <Box display="flex" gap={2} sx={{ width: "100%" }}>
+              <TextField
+                label="First Name"
+                style={{ width: "50%" }}
+                {...register("firstname", { required: true })}
+                aria-invalid={errors.firstname ? "true" : "false"}
+              />
+              {errors.firstname?.type === "required" && (
+                <p role="alert" style={{ color: "red" }}>
+                  First name is required
+                </p>
+              )}
+              <TextField
+                label="Last Name"
+                style={{ width: "50%" }}
+                {...register("lastname", { required: true })}
+                aria-invalid={errors.lastname ? "true" : "false"}
+              />
+              {errors.lastname?.type === "required" && (
+                <p role="alert" style={{ color: "red" }}>
+                  Last name is required
+                </p>
+              )}
+            </Box>
             <TextField
               label="Email Address"
               type="email"
@@ -133,7 +135,11 @@ const PersonalInfo = () => {
                 {errors.email.message}
               </p>
             )}
-
+            <TextField
+              label="Subtitle"
+              placeholder="Full Stack Developer"
+              {...register("subtitle", { required: true })}
+            />
             <TextField
               label="Mobile Number"
               type="number"
@@ -160,6 +166,7 @@ const PersonalInfo = () => {
             </Box>
             <TextField
               label="Objective"
+              fullWidth
               multiline
               rows={4}
               {...register("objective", { required: true })}
@@ -179,7 +186,13 @@ const PersonalInfo = () => {
         </Box>
 
         {/* Navigation Buttons */}
-        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            paddingRight: "30px",
+          }}
+        >
           <Button variant="contained" type="submit">
             Next
           </Button>

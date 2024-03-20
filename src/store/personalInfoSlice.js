@@ -3,7 +3,6 @@ import { createSlice } from "@reduxjs/toolkit";
 export const personalInfoSlice = createSlice({
   name: "personalInfo",
   initialState: {
-    profilepic: "",
     firstname: "",
     lastname: "",
     email: "",
@@ -13,12 +12,9 @@ export const personalInfoSlice = createSlice({
     state: "",
     postalcode: "",
     objective: "",
-    // Add other fields as needed
   },
   reducers: {
-    // Define reducers to update state
     updatePersonalInfo: (state, action) => {
-      // Update state with payload data
       return { ...state, ...action.payload };
     },
   },

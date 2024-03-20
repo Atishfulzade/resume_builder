@@ -1,48 +1,50 @@
-import { jsPDF } from "jspdf";
-export const generatePDF = (resumeData, data) => {
-  const doc = new jsPDF();
-  console.log(resumeData.save?.save);
+import jsPDF from "jspdf";
+import store from "../store/store";
+export const generatePDF = (resumeData) => {
+  // const resumeData = store.getState().resumeData;
+  resumeData.skillInfo[0].skills.map((item) => console.log(item));
+  let doc = new jsPDF();
   doc.setFontSize(22);
   doc.text(
-    resumeData.personalInfo?.firstname +
-      " " +
-      resumeData.personalInfo?.lastname,
+    resumeData.personalInfo.firstname + " " + resumeData.personalInfo.lastname,
     20,
     20
   );
 
   doc.setFontSize(15);
   doc.setTextColor("#286090");
-  doc.text(resumeData.personalInfo?.subtitle, 20, 27);
+  doc.text(resumeData.personalInfo.subtitle, 20, 27);
 
-  // Details
+  //Details
   doc.setTextColor("black");
   doc.setFontSize(12);
-  doc.text(resumeData.personalInfo?.contactnumber, 20, 35);
-  doc.text(resumeData.personalInfo?.email, 20, 40);
+  doc.text(resumeData.personalInfo.contactnumber, 20, 35);
+  doc.text(resumeData.personalInfo.email, 20, 40);
   doc.text(
-    resumeData.personalInfo?.address + " " + resumeData.personalInfo?.city,
+    resumeData.personalInfo.address + " " + resumeData.personalInfo.city,
     20,
     45
   );
-  doc.text(resumeData.personalInfo?.postalcode, 20, 50);
+  doc.text(resumeData.personalInfo.postalcode, 20, 50);
 
-  // Rectangle
+  //Rectangle
   doc.setDrawColor(0);
   doc.setFillColor(31, 44, 57);
   doc.rect(135, 0, 80, 600, "F");
 
-  // Add objective
+  // Add summary
   doc.setFontSize(12);
   doc.text("OBJECTIVE", 20, 65);
-  doc.line(20, 66, 130, 66);
 
+  doc.line(20, 66, 130, 66);
+  doc.setFontSize(12);
   const objectiveLines = doc.splitTextToSize(
-    resumeData.personalInfo?.objective,
+    resumeData.personalInfo.objective,
     110
-  );
+  ); // Adjust width as needed
   doc.text(objectiveLines, 20, 70); // Automatically split objective text into multiple lines
 
+  // Add experience
   doc.setFontSize(12);
   doc.text("EXPERIENCE", 20, 105);
   doc.line(20, 106, 130, 106);
@@ -52,13 +54,13 @@ export const generatePDF = (resumeData, data) => {
       // Check if company property exists in work object
       if (work && work.company) {
         doc.setFontSize(12);
-        doc.text(`${work?.jobtitle}`, 20, 112 + index * 20); // Adjust Y position based on index
+        doc.text(`${work.jobtitle}`, 20, 112 + index * 20); // Adjust Y position based on index
         doc.setTextColor("#286090");
         doc.setFontSize(14);
-        doc.text(`${work?.company}`, 20, 118 + index * 20);
+        doc.text(`${work.company}`, 20, 118 + index * 20);
         doc.setFontSize(12);
         doc.setTextColor("black");
-        doc.text(`${work?.startyear}-${work?.endYear}`, 20, 124 + index * 20);
+        doc.text(`${work.startyear}-${work.endYear}`, 20, 124 + index * 20);
       }
     });
   }
@@ -67,8 +69,8 @@ export const generatePDF = (resumeData, data) => {
   doc.setFontSize(12);
   doc.text("EDUCATION", 20, 180);
   doc.line(20, 181, 130, 181);
-  resumeData.educationInfo?.map((edu) =>
-    edu.education?.map((item, index) => {
+  resumeData.educationInfo.map((edu) =>
+    edu.education.map((item, index) => {
       doc.setFontSize(12);
       doc.text(`${item.institution}`, 20, 186 + index * 20); // Adjust Y position based on index
       doc.setTextColor("#286090");
@@ -79,25 +81,29 @@ export const generatePDF = (resumeData, data) => {
       doc.text(`${item.startYear}-${item.endYear}`, 20, 198 + index * 20);
     })
   );
-
-  // Profile photo
-  doc.addImage(`${resumeData.profileInfo?.profilePic}`, "JPEG", 155, 9, 35, 31);
+  doc.setDrawColor(225, 225, 225);
+  doc.line(145, 81, 200, 81); // horizontal line
+  //profile phooto
+  doc.addImage(`${resumeData.profilepic}`, "JPEG", 155, 9, 35, 35);
 
   // Black square with rounded corners
   doc.setDrawColor(31, 44, 57);
   doc.setLineWidth(13);
   doc.ellipse(172, 26, 20, 20);
 
-  // Add skills
+  // Add strengths
+
+  //Add skills
   doc.setTextColor("white");
+
   doc.setFontSize(12);
   doc.text("SKILLS", 145, 80);
+
   doc.setFontSize(12);
-  resumeData.skillInfo[0]?.skills.map((item, index) => {
+
+  resumeData.skillInfo[0].skills.map((item, index) => {
     doc.text(`• ${item.skill}`, 145, 86 + index * 6);
   });
-  if (resumeData.save && resumeData.save.save) {
-    doc.save(`${resumeData.save?.save}.pdf`);
-  }
+
   return doc.output("datauristring");
 };
