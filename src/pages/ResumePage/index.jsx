@@ -3,6 +3,20 @@ import React from "react";
 import res from "../../assets/fourth.png";
 const MyTemplate = () => {
   const previousResume = [res, res];
+
+  const getResumeFromLocalStorage = () => {
+    try {
+      // Retrieve the serialized data from local storage
+      const serializedData = localStorage.getItem("resume");
+      // Deserialize the data back to its original format
+      const resumeData = JSON.parse(serializedData);
+      console.log("Resume data retrieved from local storage.");
+      return resumeData;
+    } catch (error) {
+      console.error("Error retrieving resume data from local storage:", error);
+      return null;
+    }
+  };
   return (
     <Container maxWidth="lg">
       <div
