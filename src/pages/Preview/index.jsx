@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Document, Page, pdfjs } from "react-pdf";
 import { generatePDF } from "../../ResumeTemp/Resume1";
-import { setPdfData } from "../../store/pdfPreviewSlice";
+import { setPdfData } from "../../store/previewPdfSlice";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { updateSave } from "../../store/saveSlice";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import {
   Container,
   Grid,
@@ -17,10 +19,9 @@ import {
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 function PdfPreview() {
-  const [mainResume, setMainResume] = useState({});
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
-
+  const matches = useMediaQuery("(max-width:600px)");
   const pdfData = useSelector((state) => state.pdfPreview.pdfData);
   const personalInfo = useSelector((state) => state.personalInfo);
   const educationInfo = useSelector((state) => state.education);
@@ -33,6 +34,7 @@ function PdfPreview() {
     educationInfo,
     workInfo,
     skillInfo,
+    pdfData,
     profileInfo,
     savaInfo,
   };
@@ -60,13 +62,13 @@ function PdfPreview() {
 
   const onsubmit = (data) => {
     dispatch(updateSave(data)); // Dispatch action to update Redux store with the form data
-    saveResumeToLocalStorage(resumeData);
+    saveResumeToLocalArray(resumeData);
     // Generate PDF with the provided data
     const pdfBase64 = generatePDF(resumeData);
 
     // Set the PDF data in Redux store
     dispatch(setPdfData(pdfBase64));
-
+    toast.success("File download successfully");
     // Trigger the download
     if (data.save) {
       const pdfBlob = generateBlob(pdfBase64);
@@ -74,15 +76,19 @@ function PdfPreview() {
     }
   };
 
-  const saveResumeToLocalStorage = (resumeData) => {
+  const saveResumeToLocalArray = (resumeData) => {
     try {
-      // Serialize the resume data to JSON string
-      const serializedData = JSON.stringify(resumeData);
-      // Store the serialized data in local storage
-      localStorage.setItem("resume", serializedData);
-      console.log("Resume data saved to local storage.");
+      // Retrieve existing resumes from local storage
+      let resume = JSON.parse(localStorage.getItem("resume")) || [];
+      // Add the new resume data to the array
+      resume.push(resumeData);
+      // Serialize the updated array to JSON string
+      const serializedResumes = JSON.stringify(resume);
+      // Store the serialized array back into local storage
+      localStorage.setItem("resumes", serializedResumes);
+      console.log("Resume saved to local storage.");
     } catch (error) {
-      console.error("Error saving resume data to local storage:", error);
+      console.error("Error saving resume to local storage:", error);
     }
   };
 
@@ -106,7 +112,7 @@ function PdfPreview() {
                   pageNumber={1}
                   renderAnnotationLayer={false}
                   renderTextLayer={false}
-                  width={567}
+                  width={matches ? 345 : 700}
                 />
               </Document>
             )}

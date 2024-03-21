@@ -1,7 +1,6 @@
 import { jsPDF } from "jspdf";
 export const generatePDF = (resumeData, data) => {
   const doc = new jsPDF();
-  console.log(resumeData.save?.save);
   doc.setFontSize(22);
   doc.text(
     resumeData.personalInfo?.firstname +

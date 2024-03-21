@@ -1,9 +1,11 @@
-import { Box, Container, Grid, Typography } from "@mui/material";
+import { Box, Container, Typography, useMediaQuery } from "@mui/material";
 import React from "react";
 import underline from "../../assets/underline.svg";
 import contactImg from "../../assets/contact.svg";
 import Share from "../../component/Share";
 const AboutUs = () => {
+  const matches = useMediaQuery("(max-width:600px)");
+
   return (
     <Container
       maxWidth="lg"
@@ -20,7 +22,7 @@ const AboutUs = () => {
           Resume <br /> Builder
         </Typography>
         <img src={underline} alt="underline" className="underline" />
-        <Typography marginTop={3} width={500} minWidth={400}>
+        <Typography marginTop={3} width={matches ? 320 : 500} minWidth={320}>
           &nbsp; Welcome to ResumeBuilder, your premier destination for crafting
           standout resumes with a diverse range of templates tailored to various
           industries and career levels. Our mission is to empower individuals to
@@ -35,7 +37,12 @@ const AboutUs = () => {
         </Typography>
         <Share />
       </Box>
-      <img src={contactImg} alt="" className="contact_img" />
+      <img
+        src={contactImg}
+        alt=""
+        className="contact_img"
+        style={{ display: matches ? "none" : "" }}
+      />
     </Container>
   );
 };

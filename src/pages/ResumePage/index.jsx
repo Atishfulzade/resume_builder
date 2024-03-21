@@ -1,43 +1,113 @@
-import { Container, Typography } from "@mui/material";
-import React from "react";
-import res from "../../assets/fourth.png";
-const MyTemplate = () => {
-  const previousResume = [res, res];
+import { Box, Container, IconButton } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Document, Page, pdfjs } from "react-pdf";
+import EditIcon from "@mui/icons-material/Edit";
+import toast from "react-hot-toast";
+import DeleteIcon from "@mui/icons-material/Delete";
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
-  const getResumeFromLocalStorage = () => {
+const MyTemplate = () => {
+  const [resumeData, setResumeData] = useState([]);
+
+  useEffect(() => {
+    const getAllResumesFromLocalStorage = () => {
+      try {
+        // Retrieve resumes array from local storage
+        const serializedResumes = localStorage.getItem("resumes");
+        // Deserialize the array back to its original format
+        const resumes = JSON.parse(serializedResumes) || [];
+        console.log("Retrieved all resumes from local storage.");
+        return resumes;
+      } catch (error) {
+        console.error("Error retrieving resumes from local storage:", error);
+        return [];
+      }
+    };
+    setResumeData(getAllResumesFromLocalStorage());
+  }, []);
+  console.log(resumeData);
+  const deleteResumeFromLocalStorage = (indexToDelete) => {
     try {
-      // Retrieve the serialized data from local storage
-      const serializedData = localStorage.getItem("resume");
-      // Deserialize the data back to its original format
-      const resumeData = JSON.parse(serializedData);
-      console.log("Resume data retrieved from local storage.");
-      return resumeData;
+      // Retrieve resumes array from local storage
+      const serializedResumes = localStorage.getItem("resumes");
+      // Deserialize the array back to its original format
+      let resumes = JSON.parse(serializedResumes) || [];
+
+      // Check if the index to delete is valid
+      if (indexToDelete >= 0 && indexToDelete < resumes.length) {
+        // Remove the desired resume from the array
+        resumes.splice(indexToDelete, 1);
+
+        // Update local storage with the modified array
+        localStorage.setItem("resumes", JSON.stringify(resumes));
+
+        console.log("Resume deleted successfully.");
+        // Update state to reflect the changes
+        setResumeData(resumes);
+      } else {
+        console.error("Invalid index to delete.");
+      }
     } catch (error) {
-      console.error("Error retrieving resume data from local storage:", error);
-      return null;
+      console.error("Error deleting resume from local storage:", error);
     }
+    toast.success("Resume deleted successfully.");
   };
   return (
     <Container maxWidth="lg">
       <div
-        style={{ display: "flex", justifyContent: "flex-start", gap: "20px" }}
+        style={{
+          display: "flex",
+          justifyContent: "flex-start",
+          gap: "20px",
+          marginTop: "100px",
+          flexWrap: "wrap",
+        }}
       >
-        {previousResume.length < 1 ? (
-          <Typography variant="h4" marginTop={10}>
-            You have no saved resume
-          </Typography>
+        {resumeData.length < 1 ? (
+          <h3
+            style={{ textAlign: "center", width: "100%", marginTop: "200px" }}
+          >
+            Resume not available
+          </h3>
         ) : (
-          previousResume.map((resume) => (
-            <img
-              src={resume}
-              style={{
-                marginTop: "100px",
-                height: "450px",
-                width: "350px",
-                objectFit: "contain",
-                border: "1px solid gray",
-              }}
-            ></img>
+          resumeData &&
+          resumeData.map((data, index) => (
+            <Box border="1px solid #404040" position="relative" key={index}>
+              <Document
+                file={data.pdfData} // Pass the PDF Base64 string as file prop
+              >
+                <Page
+                  pageNumber={1}
+                  renderAnnotationLayer={false}
+                  renderTextLayer={false}
+                  width={345}
+                />
+              </Document>
+              <Box
+                display="flex"
+                justifyContent="flex-end"
+                bgcolor="#ffffff"
+                padding={1}
+                position="absolute"
+                width="110px"
+                right={0}
+                borderRadius="20px 0 0 20px"
+                bottom="10px"
+              >
+                <IconButton color="warning">
+                  <EditIcon />
+                </IconButton>
+                <IconButton
+                  color="error"
+                  variant="contained"
+                  onClick={() => {
+                    deleteResumeFromLocalStorage(index);
+                  }}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </Box>
+            </Box>
           ))
         )}
       </div>

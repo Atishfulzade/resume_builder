@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
+import toast from "react-hot-toast";
 const KeySkill = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -32,6 +32,7 @@ const KeySkill = () => {
   const onSubmit = (data) => {
     dispatch(updateSkill(data));
     data && navigate("/preview");
+    toast.success("Skills updated successfully");
   };
 
   return (

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { setProfilePic } from "../store/profileSlice";
+import toast from "react-hot-toast";
 import { updatePersonalInfo } from "../store/personalInfoSlice";
 import {
   Button,
@@ -42,6 +43,7 @@ const PersonalInfo = () => {
   const onsubmit = (data) => {
     dispatch(updatePersonalInfo(data)); // Dispatch action to update personal info in Redux store
     navigate("/template/work");
+    toast.success("Personal info updated");
   };
 
   return (

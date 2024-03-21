@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 import { updateEducation } from "../store/educationSlice";
 import { useDispatch } from "react-redux";
 const Education = () => {
@@ -21,6 +22,7 @@ const Education = () => {
   const onSubmit = (data) => {
     dispatch(updateEducation(data));
     data && navigate("/template/skill");
+    toast.success("Education Updated Successfully");
   };
 
   const addEducation = () => {

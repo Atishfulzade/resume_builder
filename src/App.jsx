@@ -10,11 +10,12 @@ import Education from "./subpages/Education";
 import Work from "./subpages/Work";
 import KeySkill from "./subpages/KeySkill";
 import PdfPreview from "./pages/Preview";
-
+import { Toaster } from "react-hot-toast";
 function App() {
   return (
     <>
       <Navbar />
+      <Toaster position="top-center" />
       <Routes>
         <Route path="/" element={<ResumeTemplate />} />
         <Route path="/template" element={<TempNav />}>

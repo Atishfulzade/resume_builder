@@ -2,7 +2,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import personalInfoReducer from "./personalInfoSlice";
 import templateSliceReducer from "./templateSlice";
 import keyskillReducer from "./keySkillSlice";
-import pdfPreviewReducer from "./pdfPreviewSlice";
+import pdfPreviewReducer from "./previewPdfSlice";
 import profileReducer from "../store/profileSlice";
 import educationReducer from "./educationSlice";
 import workReducer from "./workSlice";

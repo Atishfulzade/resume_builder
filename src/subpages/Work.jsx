@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { updatework } from "../store/workSlice";
+import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
@@ -42,6 +43,7 @@ const Work = () => {
   const onsubmit = (e) => {
     dispatch(updatework(workDetails));
     navigate("/template/education");
+    toast.success("Work updated successfully");
   };
 
   return (
