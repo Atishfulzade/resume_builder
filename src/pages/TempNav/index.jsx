@@ -5,10 +5,13 @@ import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import WorkIcon from "@mui/icons-material/Work";
 import SchoolIcon from "@mui/icons-material/School";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
+
 export default function VerticalTabs() {
   const matches = useMediaQuery("(max-width:600px)");
   const navigate = useNavigate();
+
   React.useEffect(() => {
+    // Redirect to the default route on component mount
     navigate("/template/personal_info");
   }, []);
 

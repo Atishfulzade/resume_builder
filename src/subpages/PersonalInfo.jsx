@@ -14,8 +14,7 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import avatar from "../assets/user.png";
-
+import { avatar } from "../assets";
 const PersonalInfo = () => {
   const [infoData, setInfoData] = useState({});
   const [getProfilePic, setGetProfilePic] = useState("");

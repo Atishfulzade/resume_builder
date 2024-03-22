@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Document, Page, pdfjs } from "react-pdf";
-import { generatePDF1 } from "../../ResumeTemp/Resume2";
-import { generatePDF2 } from "../../ResumeTemp/Resume1";
 import { setPdfData } from "../../store/previewPdfSlice";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -16,6 +14,8 @@ import {
   TextField,
   Button,
 } from "@mui/material";
+import { generatePDF1 } from "../../ResumeTemp/Resume1";
+import { generatePDF2 } from "../../ResumeTemp/Resume2";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -29,7 +29,6 @@ function PdfPreview() {
     educationInfo: useSelector((state) => state.education),
     workInfo: useSelector((state) => state.work),
     skillInfo: useSelector((state) => state.keyskill),
-    pdfData,
     profileInfo: useSelector((state) => state.profile),
     savaInfo: useSelector((state) => state.save),
   };
@@ -37,7 +36,6 @@ function PdfPreview() {
     (state) => state.templateInfo.selectedTemplate
   );
 
-  // Function to generate a Blob from base64 data
   const generateBlob = (base64Data) => {
     const byteCharacters = atob(base64Data.split(",")[1]);
     const byteNumbers = new Array(byteCharacters.length);
@@ -48,7 +46,6 @@ function PdfPreview() {
     return new Blob([byteArray], { type: "application/pdf" });
   };
 
-  // Function to trigger the download of the PDF
   const downloadPDF = (blob, filename) => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -59,24 +56,21 @@ function PdfPreview() {
     window.URL.revokeObjectURL(url);
   };
 
-  const onsubmit = (data) => {
-    dispatch(updateSave(data)); // Dispatch action to update Redux store with the form data
+  const onSubmit = (data) => {
+    dispatch(updateSave(data));
     saveResumeToLocalArray(resumeData);
-    // Generate PDF with the provided data
-    const pdfBase64 = generatePDF1(resumeData);
+    let pdfBase64;
     if (selectedTemplate === "template1") {
-      // Call function for template 1
-      const pdfBase64 = generatePDF2(resumeData);
+      pdfBase64 = generatePDF1(resumeData);
+    } else if (selectedTemplate === "template2") {
+      pdfBase64 = generatePDF2(resumeData);
     } else {
-      // Default case
       console.log("Template not found");
     }
 
-    // Set the PDF data in Redux store
     dispatch(setPdfData(pdfBase64));
     toast.success("File downloaded successfully");
 
-    // Trigger the download
     if (data.save) {
       const pdfBlob = generateBlob(pdfBase64);
       downloadPDF(pdfBlob, `${data.save}.pdf`);
@@ -85,13 +79,9 @@ function PdfPreview() {
 
   const saveResumeToLocalArray = (resumeData) => {
     try {
-      // Retrieve existing resumes from local storage
       let resumes = JSON.parse(localStorage.getItem("resumes")) || [];
-      // Add the new resume data to the array
       resumes.push(resumeData);
-      // Serialize the updated array to JSON string
       const serializedResumes = JSON.stringify(resumes);
-      // Store the serialized array back into local storage
       localStorage.setItem("resumes", serializedResumes);
       console.log("Resume saved to local storage.");
     } catch (error) {
@@ -100,20 +90,16 @@ function PdfPreview() {
   };
 
   useEffect(() => {
-    // Generate PDF when component mounts
-
+    let pdfBase64;
     if (selectedTemplate === "template1") {
-      // Call function for template 1
-      const pdfBase64 = generatePDF1(resumeData);
-      dispatch(setPdfData(pdfBase64));
+      pdfBase64 = generatePDF1(resumeData);
     } else if (selectedTemplate === "template2") {
-      // Call function for template 2
-      const pdfBase64 = generatePDF2(resumeData);
-      dispatch(setPdfData(pdfBase64));
+      pdfBase64 = generatePDF2(resumeData);
     } else {
-      // Default case
+      console.log("Template not found");
     }
-  }, [dispatch]);
+    dispatch(setPdfData(pdfBase64));
+  }, [dispatch, selectedTemplate]);
 
   return (
     <Container maxWidth="lg">
@@ -122,9 +108,7 @@ function PdfPreview() {
           <Typography variant="h6">Preview</Typography>
           <Box border="1px solid #ccc">
             {pdfData && (
-              <Document
-                file={pdfData} // Pass the PDF Base64 string as file prop
-              >
+              <Document file={pdfData}>
                 <Page
                   pageNumber={1}
                   renderAnnotationLayer={false}
@@ -136,11 +120,10 @@ function PdfPreview() {
           </Box>
         </Grid>
         <Grid item xs={12} md={6}>
-          <form onSubmit={handleSubmit(onsubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <Typography variant="h6">Save PDF</Typography>
             <Box>
               <Typography>Create file name</Typography>
-
               <TextField variant="outlined" fullWidth {...register("save")} />
             </Box>
             <Box marginTop={2}>

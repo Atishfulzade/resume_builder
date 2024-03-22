@@ -1,8 +1,9 @@
-import { Box, Container, Typography, useMediaQuery } from "@mui/material";
 import React from "react";
-import underline from "../../assets/underline.svg";
-import contactImg from "../../assets/contact.svg";
+import { Box, Container, Typography, useMediaQuery } from "@mui/material";
+import { underline, contactimg } from "../../assets";
 import Share from "../../component/Share";
+
+// AboutUs component
 const AboutUs = () => {
   const matches = useMediaQuery("(max-width:600px)");
 
@@ -17,11 +18,15 @@ const AboutUs = () => {
       }}
       style={{ flexDirection: "row" }}
     >
+      {/* Left side content */}
       <Box>
+        {/* Title */}
         <Typography variant="h2" fontWeight="Bold" marginTop={15}>
           Resume <br /> Builder
         </Typography>
-        <img src={underline} alt="underline" className="underline" />
+        {/* Underline image */}
+        <img src={underline} alt="Underline" className="underline" />
+        {/* Description */}
         <Typography marginTop={3} width={matches ? 320 : 500} minWidth={320}>
           &nbsp; Welcome to ResumeBuilder, your premier destination for crafting
           standout resumes with a diverse range of templates tailored to various
@@ -32,14 +37,16 @@ const AboutUs = () => {
           personalized resume that reflects your unique skills and aspirations.
           Join us today and elevate your career with ResumeGenius.
         </Typography>
+        {/* Share section */}
         <Typography marginTop={3} variant="h5" fontWeight="bold">
           Share with your friends
         </Typography>
         <Share />
       </Box>
+      {/* Right side image */}
       <img
-        src={contactImg}
-        alt=""
+        src={contactimg}
+        alt="Contact Image"
         className="contact_img"
         style={{ display: matches ? "none" : "" }}
       />

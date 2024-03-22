@@ -11,29 +11,29 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
 import Toolbar from "@mui/material/Toolbar";
-import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import logo from "../../assets/logo.webp";
+import { logo } from "../../assets";
 import { useNavigate } from "react-router-dom";
-const drawerWidth = 240;
-const navItems = [
-  { title: "Resume Template", path: "/" },
-  { title: "My Template", path: "/mytemplate" },
-  { title: "About us", path: "/about" },
-];
+import { navItems } from "../../Constant";
 
+const drawerWidth = 240;
+
+// Navbar component
 function Navbar(props) {
   const { window } = props;
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const navigate = useNavigate();
+
+  // Toggle mobile drawer
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
   };
 
+  // Drawer content
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <img src={logo} alt="" className="logo" />
+      <img src={logo} alt="Logo" className="logo" />
       <Divider />
       <List>
         {navItems.map((item) => (
@@ -58,7 +58,9 @@ function Navbar(props) {
   return (
     <Box sx={{ display: "flex", justifyContent: "space-between" }}>
       <CssBaseline />
+      {/* App Bar */}
       <AppBar component="nav">
+        {/* Toolbar */}
         <Toolbar
           sx={{
             background: "#fff",
@@ -66,7 +68,9 @@ function Navbar(props) {
             justifyContent: "space-between",
           }}
         >
-          <img src={logo} alt="" className="logo" />
+          {/* Logo */}
+          <img src={logo} alt="Logo" className="logo" />
+          {/* Menu Icon */}
           <IconButton
             color="#111"
             aria-label="open drawer"
@@ -76,6 +80,7 @@ function Navbar(props) {
           >
             <MenuIcon />
           </IconButton>
+          {/* Navigation Links */}
           <Box
             sx={{
               display: { xs: "none", sm: "block" },
@@ -96,6 +101,7 @@ function Navbar(props) {
           </Box>
         </Toolbar>
       </AppBar>
+      {/* Drawer */}
       <nav>
         <Drawer
           container={container}

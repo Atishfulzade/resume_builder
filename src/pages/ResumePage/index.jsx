@@ -1,9 +1,11 @@
-import { Box, Container, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { Box, Container, IconButton } from "@mui/material";
 import { Document, Page, pdfjs } from "react-pdf";
 import EditIcon from "@mui/icons-material/Edit";
 import toast from "react-hot-toast";
 import DeleteIcon from "@mui/icons-material/Delete";
+
+// Set worker source for pdfjs
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
 const MyTemplate = () => {
@@ -25,7 +27,7 @@ const MyTemplate = () => {
     };
     setResumeData(getAllResumesFromLocalStorage());
   }, []);
-  console.log(resumeData);
+
   const deleteResumeFromLocalStorage = (indexToDelete) => {
     try {
       // Retrieve resumes array from local storage
@@ -52,6 +54,7 @@ const MyTemplate = () => {
     }
     toast.success("Resume deleted successfully.");
   };
+
   return (
     <Container maxWidth="lg">
       <div
@@ -73,9 +76,7 @@ const MyTemplate = () => {
           resumeData &&
           resumeData.map((data, index) => (
             <Box border="1px solid #404040" position="relative" key={index}>
-              <Document
-                file={data.pdfData} // Pass the PDF Base64 string as file prop
-              >
+              <Document file={data.pdfData}>
                 <Page
                   pageNumber={1}
                   renderAnnotationLayer={false}
