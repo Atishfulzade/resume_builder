@@ -33,6 +33,10 @@ const Work = () => {
     ]);
   };
 
+  const removeWork = (indexToRemove) => {
+    setWorkDetails(workDetails.filter((_, index) => index !== indexToRemove));
+  };
+
   const handleChange = (index, e) => {
     const { name, value } = e.target;
     const updatedWorkDetails = [...workDetails];
@@ -106,6 +110,17 @@ const Work = () => {
                     onChange={(e) => handleChange(index, e)}
                   />
                 </Box>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  style={{
+                    display: workDetails.length > 1 ? "block" : "none",
+                    width: "fit-content",
+                  }}
+                  onClick={() => removeWork(index)}
+                >
+                  Remove
+                </Button>
               </Box>
             </Box>
           ))}

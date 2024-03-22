@@ -89,14 +89,11 @@ const MyTemplate = () => {
                 bgcolor="#ffffff"
                 padding={1}
                 position="absolute"
-                width="110px"
+                width="80px"
                 right={0}
                 borderRadius="20px 0 0 20px"
                 bottom="10px"
               >
-                <IconButton color="warning">
-                  <EditIcon />
-                </IconButton>
                 <IconButton
                   color="error"
                   variant="contained"

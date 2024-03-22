@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Document, Page, pdfjs } from "react-pdf";
-import { generatePDF } from "../../ResumeTemp/Resume1";
+import { generatePDF1 } from "../../ResumeTemp/Resume2";
+import { generatePDF2 } from "../../ResumeTemp/Resume1";
 import { setPdfData } from "../../store/previewPdfSlice";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -23,21 +24,19 @@ function PdfPreview() {
   const { register, handleSubmit } = useForm();
   const matches = useMediaQuery("(max-width:600px)");
   const pdfData = useSelector((state) => state.pdfPreview.pdfData);
-  const personalInfo = useSelector((state) => state.personalInfo);
-  const educationInfo = useSelector((state) => state.education);
-  const workInfo = useSelector((state) => state.work);
-  const skillInfo = useSelector((state) => state.keyskill);
-  const profileInfo = useSelector((state) => state.profile);
-  const savaInfo = useSelector((state) => state.save);
   const resumeData = {
-    personalInfo,
-    educationInfo,
-    workInfo,
-    skillInfo,
+    personalInfo: useSelector((state) => state.personalInfo),
+    educationInfo: useSelector((state) => state.education),
+    workInfo: useSelector((state) => state.work),
+    skillInfo: useSelector((state) => state.keyskill),
     pdfData,
-    profileInfo,
-    savaInfo,
+    profileInfo: useSelector((state) => state.profile),
+    savaInfo: useSelector((state) => state.save),
   };
+  const selectedTemplate = useSelector(
+    (state) => state.templateInfo.selectedTemplate
+  );
+
   // Function to generate a Blob from base64 data
   const generateBlob = (base64Data) => {
     const byteCharacters = atob(base64Data.split(",")[1]);
@@ -64,11 +63,19 @@ function PdfPreview() {
     dispatch(updateSave(data)); // Dispatch action to update Redux store with the form data
     saveResumeToLocalArray(resumeData);
     // Generate PDF with the provided data
-    const pdfBase64 = generatePDF(resumeData);
+    const pdfBase64 = generatePDF1(resumeData);
+    if (selectedTemplate === "template1") {
+      // Call function for template 1
+      const pdfBase64 = generatePDF2(resumeData);
+    } else {
+      // Default case
+      console.log("Template not found");
+    }
 
     // Set the PDF data in Redux store
     dispatch(setPdfData(pdfBase64));
-    toast.success("File download successfully");
+    toast.success("File downloaded successfully");
+
     // Trigger the download
     if (data.save) {
       const pdfBlob = generateBlob(pdfBase64);
@@ -79,11 +86,11 @@ function PdfPreview() {
   const saveResumeToLocalArray = (resumeData) => {
     try {
       // Retrieve existing resumes from local storage
-      let resume = JSON.parse(localStorage.getItem("resume")) || [];
+      let resumes = JSON.parse(localStorage.getItem("resumes")) || [];
       // Add the new resume data to the array
-      resume.push(resumeData);
+      resumes.push(resumeData);
       // Serialize the updated array to JSON string
-      const serializedResumes = JSON.stringify(resume);
+      const serializedResumes = JSON.stringify(resumes);
       // Store the serialized array back into local storage
       localStorage.setItem("resumes", serializedResumes);
       console.log("Resume saved to local storage.");
@@ -94,8 +101,18 @@ function PdfPreview() {
 
   useEffect(() => {
     // Generate PDF when component mounts
-    const pdfBase64 = generatePDF(resumeData);
-    dispatch(setPdfData(pdfBase64));
+
+    if (selectedTemplate === "template1") {
+      // Call function for template 1
+      const pdfBase64 = generatePDF1(resumeData);
+      dispatch(setPdfData(pdfBase64));
+    } else if (selectedTemplate === "template2") {
+      // Call function for template 2
+      const pdfBase64 = generatePDF2(resumeData);
+      dispatch(setPdfData(pdfBase64));
+    } else {
+      // Default case
+    }
   }, [dispatch]);
 
   return (
@@ -112,7 +129,7 @@ function PdfPreview() {
                   pageNumber={1}
                   renderAnnotationLayer={false}
                   renderTextLayer={false}
-                  width={matches ? 345 : 700}
+                  width={matches ? 345 : 567}
                 />
               </Document>
             )}

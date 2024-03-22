@@ -1,5 +1,5 @@
 import { jsPDF } from "jspdf";
-export const generatePDF = (resumeData, data) => {
+export const generatePDF1 = (resumeData, data) => {
   const doc = new jsPDF();
   doc.setFontSize(22);
   doc.text(

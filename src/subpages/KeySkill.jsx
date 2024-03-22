@@ -13,6 +13,7 @@ import {
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+
 const KeySkill = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -20,7 +21,16 @@ const KeySkill = () => {
   const [addSkills, setAddSkills] = useState([{ skill: "" }]);
 
   const handleAddSkill = () => {
-    setAddSkills([...addSkills, { skill: "" }]);
+    if (addSkills.length < 5) {
+      setAddSkills([...addSkills, { skill: "" }]);
+    }
+  };
+
+  const handleRemoveSkill = (indexToRemove) => {
+    const updatedSkills = addSkills.filter(
+      (_, index) => index !== indexToRemove
+    );
+    setAddSkills(updatedSkills);
   };
 
   const handleChange = (index, e) => {
@@ -68,6 +78,14 @@ const KeySkill = () => {
                   label="Add Skill"
                   variant="outlined"
                 />
+                <Button
+                  variant="outlined"
+                  color="error"
+                  onClick={() => handleRemoveSkill(index)}
+                  style={{ marginTop: 8 }}
+                >
+                  Remove
+                </Button>
               </Grid>
             ))}
           </Grid>

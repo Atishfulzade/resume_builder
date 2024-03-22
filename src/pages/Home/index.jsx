@@ -1,10 +1,10 @@
 import React from "react";
 import { Button, Container } from "@mui/material";
 import { Typography } from "@mui/material";
-import img1 from "../../assets/first.png";
-import img2 from "../../assets/second.png";
+import img1 from "../../assets/first.webp";
+import img2 from "../../assets/second.webp";
 import img3 from "../../assets/third.svg";
-import img4 from "../../assets/fourth.png";
+import img4 from "../../assets/fourth.webp";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { updateSelectedTemplate } from "../../store/templateSlice";
@@ -21,7 +21,6 @@ const ResumeTemplate = () => {
   const chooseTemplate = (templateId) => {
     dispatch(updateSelectedTemplate(templateId)); // Dispatch action to update selected template
     navigate("/template");
-    console.log(templateId);
   };
   return (
     <Container maxWidth="lg">

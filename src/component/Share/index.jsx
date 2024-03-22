@@ -4,7 +4,6 @@ import TelegramIcon from "@mui/icons-material/Telegram";
 import WhatsAppIcon from "@mui/icons-material/WhatsApp";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import XIcon from "@mui/icons-material/X";
-import logo from "../../assets/logo.jpg";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import {
   FacebookShareButton,

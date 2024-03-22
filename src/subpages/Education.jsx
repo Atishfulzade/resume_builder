@@ -12,6 +12,7 @@ import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
 import { updateEducation } from "../store/educationSlice";
 import { useDispatch } from "react-redux";
+
 const Education = () => {
   const [educationDetails, setEducationDetails] = useState([
     { institution: "", degree: "", startYear: "", endYear: "" },
@@ -19,6 +20,7 @@ const Education = () => {
   const { register, handleSubmit } = useForm();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
   const onSubmit = (data) => {
     dispatch(updateEducation(data));
     data && navigate("/template/skill");
@@ -30,6 +32,12 @@ const Education = () => {
       ...educationDetails,
       { institution: "", degree: "", startYear: "", endYear: "" },
     ]);
+  };
+
+  const removeEducation = (indexToRemove) => {
+    setEducationDetails(
+      educationDetails.filter((_, index) => index !== indexToRemove)
+    );
   };
 
   const handleInputChange = (index, name, value) => {
@@ -118,6 +126,17 @@ const Education = () => {
                   })}
                 />
               </Box>
+              <Button
+                variant="outlined"
+                color="error"
+                style={{
+                  display: educationDetails.length <= 1 ? "none" : "block",
+                  width: "fit-content",
+                }}
+                onClick={() => removeEducation(index)}
+              >
+                Remove
+              </Button>
             </Box>
           ))}
 

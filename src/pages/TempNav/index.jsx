@@ -1,5 +1,5 @@
 import * as React from "react";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import PersonAddAlt1Icon from "@mui/icons-material/PersonAddAlt1";
 import WorkIcon from "@mui/icons-material/Work";
@@ -7,10 +7,10 @@ import SchoolIcon from "@mui/icons-material/School";
 import WorkspacePremiumIcon from "@mui/icons-material/WorkspacePremium";
 export default function VerticalTabs() {
   const matches = useMediaQuery("(max-width:600px)");
-
-  const stopNavigating = (e) => {
-    e.preventDefault();
-  };
+  const navigate = useNavigate();
+  React.useEffect(() => {
+    navigate("/template/personal_info");
+  }, []);
 
   return (
     <>
@@ -55,7 +55,6 @@ export default function VerticalTabs() {
               color: "#404040",
               padding: "10px 10px",
             }}
-            // onClick={stopNavigating}
           >
             {matches ? <WorkIcon /> : "Work Experience"}
           </NavLink>
@@ -68,7 +67,6 @@ export default function VerticalTabs() {
               fontSize: "20px",
               padding: "10px 10px",
             }}
-            // onClick={stopNavigating}
           >
             {matches ? <SchoolIcon /> : "Education"}
           </NavLink>
@@ -83,7 +81,6 @@ export default function VerticalTabs() {
               paddingLeft: "50px",
               padding: "10px 10px",
             }}
-            // onClick={stopNavigating}
           >
             {matches ? <WorkspacePremiumIcon /> : "Key Skill"}
           </NavLink>

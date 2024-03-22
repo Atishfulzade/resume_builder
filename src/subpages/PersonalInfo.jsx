@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setProfilePic } from "../store/profileSlice";
 import toast from "react-hot-toast";
 import { updatePersonalInfo } from "../store/personalInfoSlice";
@@ -17,16 +17,38 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import avatar from "../assets/user.png";
 
 const PersonalInfo = () => {
+  const [infoData, setInfoData] = useState({});
+  const [getProfilePic, setGetProfilePic] = useState("");
   const [profilePicUrl, setProfilePicUrl] = useState(""); // Renamed state variable
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
+  const personalInfo = useSelector((state) => state.personalInfo);
+  const profilePicData = useSelector((state) => state.profile);
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm();
-
+  useEffect(() => {
+    // Fetch profile picture data from Redux store
+    setGetProfilePic(profilePicData);
+    // Set profile picture URL
+    setProfilePicUrl(profilePicData.profilePic);
+  }, [profilePicData]);
+  useEffect(() => {
+    setInfoData(personalInfo);
+    setValue("firstname", personalInfo.firstname || "");
+    setValue("lastname", personalInfo.lastname || "");
+    setValue("email", personalInfo.email || "");
+    setValue("subtitle", personalInfo.subtitle || "");
+    setValue("contactnumber", personalInfo.contactnumber || "");
+    setValue("address", personalInfo.address || "");
+    setValue("city", personalInfo.city || "");
+    setValue("state", personalInfo.state || "");
+    setValue("postalcode", personalInfo.postalcode || "");
+    setValue("objective", personalInfo.objective || "");
+  }, [personalInfo, setValue]);
   const handleFileChange = async (event) => {
     const file = await event.target.files[0];
     const reader = new FileReader();
@@ -74,7 +96,7 @@ const PersonalInfo = () => {
             }}
           >
             <Avatar
-              src={profilePicUrl || avatar}
+              src={profilePicUrl || profilePicData.profilePic || avatar}
               alt="User Avatar"
               sx={{ width: 120, height: 120 }}
             />
@@ -108,6 +130,10 @@ const PersonalInfo = () => {
                 style={{ width: "50%" }}
                 {...register("firstname", { required: true })}
                 aria-invalid={errors.firstname ? "true" : "false"}
+                value={infoData.firstname || ""}
+                onChange={(e) =>
+                  setInfoData({ ...infoData, firstname: e.target.value })
+                }
               />
               {errors.firstname?.type === "required" && (
                 <p role="alert" style={{ color: "red" }}>
@@ -172,6 +198,10 @@ const PersonalInfo = () => {
               multiline
               rows={4}
               {...register("objective", { required: true })}
+              value={infoData.objective || ""}
+              onChange={(e) =>
+                setInfoData({ ...infoData, objective: e.target.value })
+              }
             />
           </Box>
         </Box>
