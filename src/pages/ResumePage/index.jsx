@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Box, Container, IconButton } from "@mui/material";
 import { Document, Page, pdfjs } from "react-pdf";
-import EditIcon from "@mui/icons-material/Edit";
 import toast from "react-hot-toast";
 import DeleteIcon from "@mui/icons-material/Delete";
 
@@ -18,8 +17,7 @@ const MyTemplate = () => {
         const serializedResumes = localStorage.getItem("resumes");
         // Deserialize the array back to its original format
         const resumes = JSON.parse(serializedResumes) || [];
-        console.log("Retrieved all resumes from local storage.");
-        console.log(resumes);
+
         return resumes;
       } catch (error) {
         console.error("Error retrieving resumes from local storage:", error);
