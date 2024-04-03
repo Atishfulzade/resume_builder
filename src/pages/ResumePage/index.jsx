@@ -77,7 +77,7 @@ const MyTemplate = () => {
           resumeData &&
           resumeData.map((data, index) => (
             <Box border="1px solid #404040" position="relative" key={index}>
-              <Document file={data.pdfPreview.pdfData}>
+              <Document file={data?.pdfPreview?.pdfData}>
                 <Page
                   pageNumber={1}
                   renderAnnotationLayer={false}
