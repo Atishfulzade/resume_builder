@@ -19,6 +19,7 @@ const MyTemplate = () => {
         // Deserialize the array back to its original format
         const resumes = JSON.parse(serializedResumes) || [];
         console.log("Retrieved all resumes from local storage.");
+        console.log(resumes);
         return resumes;
       } catch (error) {
         console.error("Error retrieving resumes from local storage:", error);
@@ -76,7 +77,7 @@ const MyTemplate = () => {
           resumeData &&
           resumeData.map((data, index) => (
             <Box border="1px solid #404040" position="relative" key={index}>
-              <Document file={data.pdfData}>
+              <Document file={data.pdfPreview.pdfData}>
                 <Page
                   pageNumber={1}
                   renderAnnotationLayer={false}

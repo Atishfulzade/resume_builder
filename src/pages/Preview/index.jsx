@@ -31,6 +31,7 @@ function PdfPreview() {
     skillInfo: useSelector((state) => state.keyskill),
     profileInfo: useSelector((state) => state.profile),
     savaInfo: useSelector((state) => state.save),
+    pdfPreview: useSelector((state) => state.pdfPreview),
   };
   const selectedTemplate = useSelector(
     (state) => state.templateInfo.selectedTemplate
