@@ -16,6 +16,8 @@ import {
 } from "@mui/material";
 import { generatePDF1 } from "../../ResumeTemp/Resume1";
 import { generatePDF2 } from "../../ResumeTemp/Resume2";
+import { generatePDF3 } from "../../ResumeTemp/Resume3";
+import { generatePDF4 } from "../../ResumeTemp/Resume4";
 
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
@@ -65,8 +67,12 @@ function PdfPreview() {
       pdfBase64 = generatePDF1(resumeData);
     } else if (selectedTemplate === "template2") {
       pdfBase64 = generatePDF2(resumeData);
+    } else if (selectedTemplate === "template3") {
+      pdfBase64 = generatePDF3(resumeData);
+    } else if (selectedTemplate === "template4") {
+      pdfBase64 = generatePDF4(resumeData);
     } else {
-      console.log("Template not found");
+      console.log("Select template");
     }
 
     dispatch(setPdfData(pdfBase64));
@@ -96,8 +102,12 @@ function PdfPreview() {
       pdfBase64 = generatePDF1(resumeData);
     } else if (selectedTemplate === "template2") {
       pdfBase64 = generatePDF2(resumeData);
+    } else if (selectedTemplate === "template3") {
+      pdfBase64 = generatePDF3(resumeData);
+    } else if (selectedTemplate === "template4") {
+      pdfBase64 = generatePDF4(resumeData);
     } else {
-      console.log("Template not found");
+      console.log("Select template");
     }
     dispatch(setPdfData(pdfBase64));
   }, [dispatch, selectedTemplate]);

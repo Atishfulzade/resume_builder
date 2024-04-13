@@ -73,7 +73,7 @@ const MyTemplate = () => {
           </h3>
         ) : (
           resumeData &&
-          resumeData.map((data, index) => (
+          resumeData?.map((data, index) => (
             <Box border="1px solid #404040" position="relative" key={index}>
               <Document file={data?.pdfPreview?.pdfData}>
                 <Page
