@@ -12,6 +12,7 @@ import {
   Box,
   Avatar,
 } from "@mui/material";
+
 import { useNavigate } from "react-router-dom";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { avatar } from "../assets";
@@ -23,12 +24,14 @@ const PersonalInfo = () => {
   const navigate = useNavigate();
   const personalInfo = useSelector((state) => state.personalInfo);
   const profilePicData = useSelector((state) => state.profile);
+  const selectedTemplate = useSelector((state) => state.templateInfo);
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
   } = useForm();
+
   useEffect(() => {
     // Fetch profile picture data from Redux store
     setGetProfilePic(profilePicData);
@@ -99,19 +102,24 @@ const PersonalInfo = () => {
               alt="User Avatar"
               sx={{ width: 120, height: 120 }}
             />
-            <Button
-              component="label"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-              sx={{ position: "relative", height: "100%" }}
-            >
-              Upload Profile
-              <input
-                type="file"
-                onChange={handleFileChange}
-                style={{ display: "none" }}
-              />
-            </Button>
+            {selectedTemplate.selectedTemplate === "template2" ||
+            selectedTemplate.selectedTemplate === "template4" ? (
+              "This template has no need of profile picture"
+            ) : (
+              <Button
+                component="label"
+                variant="contained"
+                startIcon={<CloudUploadIcon />}
+                sx={{ position: "relative", height: "100%" }}
+              >
+                Upload Profile
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  style={{ display: "none" }}
+                />
+              </Button>
+            )}
           </Box>
           {/* Form Fields */}
           <Box
