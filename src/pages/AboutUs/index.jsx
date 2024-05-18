@@ -14,11 +14,9 @@ const AboutUs = () => {
         display: "flex",
         justifyContent: "space-between",
         flexWrap: "wrap",
-        flexDirection: "column",
+        flexDirection: { xs: "column", md: "row" },
       }}
-      style={{ flexDirection: "row" }}
     >
-      {/* Left side content */}
       <Box>
         {/* Title */}
         <Typography variant="h2" fontWeight="Bold" marginTop={15}>
@@ -28,7 +26,7 @@ const AboutUs = () => {
         <img src={underline} alt="Underline" className="underline" />
         {/* Description */}
         <Typography marginTop={3} width={matches ? 320 : 500} minWidth={320}>
-          &nbsp; Welcome to ResumeBuilder, your premier destination for crafting
+          Welcome to ResumeBuilder, your premier destination for crafting
           standout resumes with a diverse range of templates tailored to various
           industries and career levels. Our mission is to empower individuals to
           land their dream jobs by providing intuitive customization tools,
@@ -43,13 +41,10 @@ const AboutUs = () => {
         </Typography>
         <Share />
       </Box>
-      {/* Right side image */}
-      <img
-        src={contactimg}
-        alt="Contact Image"
-        className="contact_img"
-        style={{ display: matches ? "none" : "" }}
-      />
+      {/* Right side image, hidden on small screens */}
+      {!matches && (
+        <img src={contactimg} alt="Contact Image" className="contact_img" />
+      )}
     </Container>
   );
 };

@@ -1,5 +1,3 @@
-// profileSlice.js
-
 import { createSlice } from "@reduxjs/toolkit";
 
 const profileSlice = createSlice({

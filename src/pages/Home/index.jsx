@@ -1,6 +1,5 @@
 import React from "react";
-import { Button, Container } from "@mui/material";
-import { Typography } from "@mui/material";
+import { Button, Container, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { myResumeTemp } from "../../Constant.js";
@@ -14,7 +13,7 @@ const ResumeTemplate = () => {
   // Function to choose a template
   const chooseTemplate = (templateId) => {
     dispatch(updateSelectedTemplate(templateId)); // Dispatch action to update selected template
-    navigate("/template");
+    navigate("/template"); // Navigate to the template page
   };
 
   return (
@@ -24,10 +23,9 @@ const ResumeTemplate = () => {
         Template
       </Typography>
       {/* Description */}
-      <Typography variant="p" gutterBottom>
+      <Typography variant="body1" gutterBottom>
         Select a template to get started
       </Typography>
-
       {/* Template selection */}
       <div className="template">
         {myResumeTemp.map((item, index) => (
@@ -37,15 +35,13 @@ const ResumeTemplate = () => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => {
-                  chooseTemplate(item.title);
-                }}
+                onClick={() => chooseTemplate(item.title)}
               >
                 Use template
               </Button>
             </div>
             {/* Template image */}
-            <img src={item.url} alt="Template" />
+            <img src={item.url} alt={`Template ${item.title}`} />
           </div>
         ))}
       </div>

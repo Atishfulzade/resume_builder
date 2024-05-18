@@ -25,20 +25,23 @@ function PdfPreview() {
   const dispatch = useDispatch();
   const { register, handleSubmit } = useForm();
   const matches = useMediaQuery("(max-width:600px)");
+
   const pdfData = useSelector((state) => state.pdfPreview.pdfData);
+  const selectedTemplate = useSelector(
+    (state) => state.templateInfo.selectedTemplate
+  );
+
   const resumeData = {
     personalInfo: useSelector((state) => state.personalInfo),
     educationInfo: useSelector((state) => state.education),
     workInfo: useSelector((state) => state.work),
     skillInfo: useSelector((state) => state.keyskill),
     profileInfo: useSelector((state) => state.profile),
-    savaInfo: useSelector((state) => state.save),
+    saveInfo: useSelector((state) => state.save),
     pdfPreview: useSelector((state) => state.pdfPreview),
   };
-  const selectedTemplate = useSelector(
-    (state) => state.templateInfo.selectedTemplate
-  );
 
+  // Convert base64 PDF data to a Blob
   const generateBlob = (base64Data) => {
     const byteCharacters = atob(base64Data.split(",")[1]);
     const byteNumbers = new Array(byteCharacters.length);
@@ -49,6 +52,7 @@ function PdfPreview() {
     return new Blob([byteArray], { type: "application/pdf" });
   };
 
+  // Download the PDF file
   const downloadPDF = (blob, filename) => {
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement("a");
@@ -59,20 +63,28 @@ function PdfPreview() {
     window.URL.revokeObjectURL(url);
   };
 
+  // Handle form submission to save PDF
   const onSubmit = (data) => {
     dispatch(updateSave(data));
     saveResumeToLocalArray(resumeData);
+
     let pdfBase64;
-    if (selectedTemplate === "template1") {
-      pdfBase64 = generatePDF1(resumeData);
-    } else if (selectedTemplate === "template2") {
-      pdfBase64 = generatePDF2(resumeData);
-    } else if (selectedTemplate === "template3") {
-      pdfBase64 = generatePDF3(resumeData);
-    } else if (selectedTemplate === "template4") {
-      pdfBase64 = generatePDF4(resumeData);
-    } else {
-      console.log("Select template");
+    switch (selectedTemplate) {
+      case "template1":
+        pdfBase64 = generatePDF1(resumeData);
+        break;
+      case "template2":
+        pdfBase64 = generatePDF2(resumeData);
+        break;
+      case "template3":
+        pdfBase64 = generatePDF3(resumeData);
+        break;
+      case "template4":
+        pdfBase64 = generatePDF4(resumeData);
+        break;
+      default:
+        console.log("Select template");
+        return;
     }
 
     dispatch(setPdfData(pdfBase64));
@@ -84,30 +96,37 @@ function PdfPreview() {
     }
   };
 
+  // Save resume data to local storage
   const saveResumeToLocalArray = (resumeData) => {
     try {
-      let resumes = JSON.parse(localStorage.getItem("resumes")) || [];
+      const resumes = JSON.parse(localStorage.getItem("resumes")) || [];
       resumes.push(resumeData);
-      const serializedResumes = JSON.stringify(resumes);
-      localStorage.setItem("resumes", serializedResumes);
+      localStorage.setItem("resumes", JSON.stringify(resumes));
       console.log("Resume saved to local storage.");
     } catch (error) {
       console.error("Error saving resume to local storage:", error);
     }
   };
 
+  // Generate PDF preview on component mount and when template changes
   useEffect(() => {
     let pdfBase64;
-    if (selectedTemplate === "template1") {
-      pdfBase64 = generatePDF1(resumeData);
-    } else if (selectedTemplate === "template2") {
-      pdfBase64 = generatePDF2(resumeData);
-    } else if (selectedTemplate === "template3") {
-      pdfBase64 = generatePDF3(resumeData);
-    } else if (selectedTemplate === "template4") {
-      pdfBase64 = generatePDF4(resumeData);
-    } else {
-      console.log("Select template");
+    switch (selectedTemplate) {
+      case "template1":
+        pdfBase64 = generatePDF1(resumeData);
+        break;
+      case "template2":
+        pdfBase64 = generatePDF2(resumeData);
+        break;
+      case "template3":
+        pdfBase64 = generatePDF3(resumeData);
+        break;
+      case "template4":
+        pdfBase64 = generatePDF4(resumeData);
+        break;
+      default:
+        console.log("Select template");
+        return;
     }
     dispatch(setPdfData(pdfBase64));
   }, [dispatch, selectedTemplate]);
